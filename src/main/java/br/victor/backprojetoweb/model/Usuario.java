@@ -47,4 +47,13 @@ public class Usuario {
 
     public LocalDateTime getDataCadastro() { return dataCadastro; }
     public void setDataCadastro(LocalDateTime dataCadastro) { this.dataCadastro = dataCadastro; }
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "perfil_id", referencedColumnName = "id")
+    private PerfilUsuario perfilUsuario;
+
+    // Getter e Setter
+    public PerfilUsuario getPerfilUsuario() { return perfilUsuario; }
+    public void setPerfilUsuario(PerfilUsuario perfilUsuario) { this.perfilUsuario = perfilUsuario; }
+
 }

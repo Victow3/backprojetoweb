@@ -1,13 +1,19 @@
 package br.victor.backprojetoweb.service;
 
+import br.victor.backprojetoweb.dto.LoginDTO;
+import br.victor.backprojetoweb.dto.PerfilDTO;
 import br.victor.backprojetoweb.model.Usuario;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface UsuarioService {
     Usuario salvarUsuario(Usuario usuario);
     List<Usuario> listarUsuarios();
     Usuario buscarPorId(Long id);
     void deletarUsuario(Long id);
+
+    // 🔑 Novos métodos
+    Usuario buscarPorEmail(String email);
+    Usuario login(LoginDTO loginDTO);
+    PerfilDTO buscarPerfil(Long id);
 }

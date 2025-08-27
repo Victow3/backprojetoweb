@@ -2,6 +2,8 @@ package br.victor.backprojetoweb.controller;
 
 import br.victor.backprojetoweb.dto.UsuarioRequestDTO;
 import br.victor.backprojetoweb.dto.UsuarioResponseDTO;
+import br.victor.backprojetoweb.dto.LoginDTO;
+import br.victor.backprojetoweb.dto.PerfilDTO;
 import br.victor.backprojetoweb.model.Usuario;
 import br.victor.backprojetoweb.service.UsuarioService;
 import br.victor.backprojetoweb.exception.UsuarioException;
@@ -77,5 +79,32 @@ public class UsuarioController {
     public ResponseEntity<Void> deletarUsuario(@PathVariable Long id) {
         usuarioService.deletarUsuario(id);
         return ResponseEntity.noContent().build();
+    }
+
+    // ========================
+    // 🔑 NOVOS MÉTODOS
+    // ========================
+
+    // Login (POST /api/usuarios/login)
+    @PostMapping("/login")
+    public ResponseEntity<UsuarioResponseDTO> login(@RequestBody LoginDTO loginDTO) {
+        try {
+            Usuario usuario = usuarioService.login(loginDTO);
+            UsuarioResponseDTO responseDTO = toResponseDTO(usuario);
+            return ResponseEntity.ok(responseDTO);
+        } catch (UsuarioException ex) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
+
+    // Buscar perfil de um usuário (GET /api/usuarios/{id}/perfil)
+    @GetMapping("/{id}/perfil")
+    public ResponseEntity<PerfilDTO> getPerfil(@PathVariable Long id) {
+        try {
+            PerfilDTO perfil = usuarioService.buscarPerfil(id);
+            return ResponseEntity.ok(perfil);
+        } catch (UsuarioException ex) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

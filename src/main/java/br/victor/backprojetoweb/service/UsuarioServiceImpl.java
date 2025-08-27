@@ -1,21 +1,21 @@
 package br.victor.backprojetoweb.service;
 
+import br.victor.backprojetoweb.dto.LoginDTO;
+import br.victor.backprojetoweb.dto.PerfilDTO;
+import br.victor.backprojetoweb.model.PerfilUsuario;
 import br.victor.backprojetoweb.model.Usuario;
 import br.victor.backprojetoweb.repository.UsuarioRepository;
 import br.victor.backprojetoweb.exception.UsuarioException;
-import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
 
-    // Injeção pelo construtor (recomendado)
     public UsuarioServiceImpl(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
     }
@@ -23,7 +23,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     @Transactional
     public Usuario salvarUsuario(Usuario usuario) {
-        // Aqui você pode adicionar regras antes de salvar, ex: criptografar senha
+        // Aqui poderia criptografar a senha antes de salvar
         return usuarioRepository.save(usuario);
     }
 
@@ -34,7 +34,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public Usuario buscarPorId(Long id) {
         return usuarioRepository.findById(id)
                 .orElseThrow(() -> new UsuarioException("Usuário não encontrado com id: " + id));
@@ -45,4 +45,47 @@ public class UsuarioServiceImpl implements UsuarioService {
     public void deletarUsuario(Long id) {
         usuarioRepository.deleteById(id);
     }
+
+// Dentro de UsuarioServiceImpl
+
+    // Buscar usuário por email
+    @Transactional(readOnly = true)
+    public Usuario buscarPorEmail(String email) {
+        Usuario usuario = usuarioRepository.findByEmail(email);
+        if (usuario == null) {
+            throw new UsuarioException("Usuário não encontrado com email: " + email);
+        }
+        return usuario;
+    }
+
+    // Login com DTO
+    @Transactional(readOnly = true)
+    public Usuario login(LoginDTO loginDTO) {
+        Usuario usuario = buscarPorEmail(loginDTO.getEmail());
+
+        if (!usuario.getSenha().equals(loginDTO.getSenha())) {
+            throw new UsuarioException("Senha incorreta");
+        }
+
+        return usuario; // podemos retornar o usuário, e o controller decide o que expor
+    }
+
+    // Buscar apenas o perfil do usuário
+    @Transactional(readOnly = true)
+    public PerfilDTO buscarPerfil(Long usuarioId) {
+        Usuario usuario = buscarPorId(usuarioId);
+
+        if (usuario.getPerfilUsuario() == null) {
+            throw new UsuarioException("Usuário não possui perfil associado");
+        }
+
+        return new PerfilDTO(
+                usuario.getNome(),
+                usuario.getEmail(),
+                usuario.getPerfilUsuario().getDescricao(),
+                usuario.getPerfilUsuario().getNivelAcesso(),
+                usuario.getDataCadastro()
+        );
+    }
+
 }
