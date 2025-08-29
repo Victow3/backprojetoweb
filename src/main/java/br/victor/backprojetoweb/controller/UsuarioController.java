@@ -1,9 +1,6 @@
 package br.victor.backprojetoweb.controller;
 
-import br.victor.backprojetoweb.dto.UsuarioRequestDTO;
-import br.victor.backprojetoweb.dto.UsuarioResponseDTO;
-import br.victor.backprojetoweb.dto.LoginDTO;
-import br.victor.backprojetoweb.dto.PerfilDTO;
+import br.victor.backprojetoweb.dto.*;
 import br.victor.backprojetoweb.model.Usuario;
 import br.victor.backprojetoweb.service.UsuarioService;
 import br.victor.backprojetoweb.exception.UsuarioException;
@@ -25,7 +22,6 @@ public class UsuarioController {
         this.usuarioService = usuarioService;
     }
 
-    // Mapeamento helper: Usuario -> UsuarioResponseDTO
     private UsuarioResponseDTO toResponseDTO(Usuario usuario) {
         UsuarioResponseDTO dto = new UsuarioResponseDTO();
         dto.setId(usuario.getId());
@@ -35,7 +31,6 @@ public class UsuarioController {
         return dto;
     }
 
-    // Mapeamento helper: UsuarioRequestDTO -> Usuario
     private Usuario toEntity(UsuarioRequestDTO dto) {
         Usuario usuario = new Usuario();
         usuario.setNome(dto.getNome());
@@ -44,7 +39,6 @@ public class UsuarioController {
         return usuario;
     }
 
-    // Criar novo usuário (POST /api/usuarios)
     @PostMapping
     public ResponseEntity<UsuarioResponseDTO> criarUsuario(@Valid @RequestBody UsuarioRequestDTO usuarioDTO) {
         Usuario usuario = toEntity(usuarioDTO);
@@ -53,51 +47,49 @@ public class UsuarioController {
         return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
     }
 
-    // Listar todos usuários (GET /api/usuarios)
     @GetMapping
     public List<UsuarioResponseDTO> listarUsuarios() {
-        List<Usuario> usuarios = usuarioService.listarUsuarios();
-        return usuarios.stream()
+        return usuarioService.listarUsuarios().stream()
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());
     }
 
-    // Buscar usuário por id (GET /api/usuarios/{id})
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioResponseDTO> buscarPorId(@PathVariable Long id) {
         try {
             Usuario usuario = usuarioService.buscarPorId(id);
-            UsuarioResponseDTO dto = toResponseDTO(usuario);
-            return ResponseEntity.ok(dto);
+            return ResponseEntity.ok(toResponseDTO(usuario));
         } catch (UsuarioException ex) {
             return ResponseEntity.notFound().build();
         }
     }
 
-    // Deletar usuário (DELETE /api/usuarios/{id})
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarUsuario(@PathVariable Long id) {
         usuarioService.deletarUsuario(id);
         return ResponseEntity.noContent().build();
     }
 
-    // ========================
-    // 🔑 NOVOS MÉTODOS
-    // ========================
-
-    // Login (POST /api/usuarios/login)
+    // ✅ Login com DTO correto
     @PostMapping("/login")
-    public ResponseEntity<UsuarioResponseDTO> login(@RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginDTO loginDTO) {
         try {
             Usuario usuario = usuarioService.login(loginDTO);
-            UsuarioResponseDTO responseDTO = toResponseDTO(usuario);
-            return ResponseEntity.ok(responseDTO);
+            Long perfilId = (usuario.getPerfilUsuario() != null) ? usuario.getPerfilUsuario().getId() : null;
+
+            LoginResponseDTO response = new LoginResponseDTO(
+                    usuario.getId(),
+                    usuario.getNome(),
+                    usuario.getEmail(),
+                    perfilId
+            );
+
+            return ResponseEntity.ok(response);
         } catch (UsuarioException ex) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 
-    // Buscar perfil de um usuário (GET /api/usuarios/{id}/perfil)
     @GetMapping("/{id}/perfil")
     public ResponseEntity<PerfilDTO> getPerfil(@PathVariable Long id) {
         try {

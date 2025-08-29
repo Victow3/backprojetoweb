@@ -2,10 +2,7 @@ package br.victor.backprojetoweb.controller;
 
 import br.victor.backprojetoweb.dto.GameDTO;
 import br.victor.backprojetoweb.service.IgdbService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -34,5 +31,10 @@ public class GameController {
             @RequestParam(defaultValue = "0") int offset
     ) {
         return igdbService.buscarJogosPorNome(nome, limit, offset);
+    }
+
+    @GetMapping("/{id}")
+    public GameDTO buscarPorId(@PathVariable Long id) {
+        return igdbService.buscarPorId(id);
     }
 }

@@ -11,6 +11,7 @@ public interface UsuarioService {
     List<Usuario> listarUsuarios();
     Usuario buscarPorId(Long id);
     void deletarUsuario(Long id);
+    Long buscarPerfilId(Long usuarioId);
 
     // 🔑 Novos métodos
     Usuario buscarPorEmail(String email);

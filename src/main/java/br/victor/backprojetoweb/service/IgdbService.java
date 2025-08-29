@@ -10,7 +10,6 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.URLEncoder;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
@@ -78,6 +77,7 @@ public class IgdbService {
 
         List<GameDTO> jogos = new ArrayList<>();
         for (JsonNode node : array) {
+            Long id = node.has("id") ? node.get("id").asLong() : null;
             String name = node.has("name") ? node.get("name").asText() : "Sem nome";
             String coverUrl = null;
             if (node.has("cover") && node.get("cover").has("url")) {
@@ -88,7 +88,9 @@ public class IgdbService {
                 long epoch = node.get("first_release_date").asLong();
                 releaseDate = Instant.ofEpochSecond(epoch).atZone(ZoneId.systemDefault()).toLocalDate();
             }
-            jogos.add(new GameDTO(name, coverUrl, releaseDate));
+            String summary = node.has("summary") ? node.get("summary").asText() : null;
+
+            jogos.add(new GameDTO(id, name, coverUrl, releaseDate, summary));
         }
         return jogos;
     }
@@ -97,7 +99,7 @@ public class IgdbService {
     public List<GameDTO> buscarJogos(int limit, int offset) {
         try {
             String query = String.format(
-                    "fields name, first_release_date, cover.url;" +
+                    "fields id, name, first_release_date, cover.url, summary;" +
                             " sort first_release_date desc;" +
                             " limit %d; offset %d;", limit, offset
             );
@@ -108,20 +110,34 @@ public class IgdbService {
         }
     }
 
-    // Busca por nome (com paginação) — usa a query `search "..."` da IGDB
+    // Busca por nome (com paginação)
     public List<GameDTO> buscarJogosPorNome(String nome, int limit, int offset) {
         try {
-            // Escapa aspas para não quebrar a query
             String termo = nome.replace("\"", "\\\"");
             String query = String.format(
                     "search \"%s\";" +
-                            " fields name, first_release_date, cover.url;" +
+                            " fields id, name, first_release_date, cover.url, summary;" +
                             " limit %d; offset %d;", termo, limit, offset
             );
             return chamarIGDB(query);
         } catch (Exception e) {
             e.printStackTrace();
             return List.of();
+        }
+    }
+
+    // Busca por ID único
+    public GameDTO buscarPorId(Long id) {
+        try {
+            String query = "fields id, name, cover.url, first_release_date, summary; where id = " + id + ";";
+            List<GameDTO> jogos = chamarIGDB(query);
+
+            if (jogos.isEmpty()) {
+                throw new RuntimeException("Jogo não encontrado com id: " + id);
+            }
+            return jogos.get(0);
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao buscar jogo por id " + id, e);
         }
     }
 }

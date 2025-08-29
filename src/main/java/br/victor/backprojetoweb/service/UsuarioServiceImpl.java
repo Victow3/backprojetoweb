@@ -2,10 +2,11 @@ package br.victor.backprojetoweb.service;
 
 import br.victor.backprojetoweb.dto.LoginDTO;
 import br.victor.backprojetoweb.dto.PerfilDTO;
+import br.victor.backprojetoweb.exception.UsuarioException;
 import br.victor.backprojetoweb.model.PerfilUsuario;
 import br.victor.backprojetoweb.model.Usuario;
+import br.victor.backprojetoweb.repository.PerfilUsuarioRepository;
 import br.victor.backprojetoweb.repository.UsuarioRepository;
-import br.victor.backprojetoweb.exception.UsuarioException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,15 +16,30 @@ import java.util.List;
 public class UsuarioServiceImpl implements UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
+    private final PerfilUsuarioRepository perfilUsuarioRepository;
 
-    public UsuarioServiceImpl(UsuarioRepository usuarioRepository) {
+    public UsuarioServiceImpl(UsuarioRepository usuarioRepository,
+                              PerfilUsuarioRepository perfilUsuarioRepository) {
         this.usuarioRepository = usuarioRepository;
+        this.perfilUsuarioRepository = perfilUsuarioRepository;
     }
 
     @Override
     @Transactional
     public Usuario salvarUsuario(Usuario usuario) {
-        // Aqui poderia criptografar a senha antes de salvar
+        // Cria automaticamente um PerfilUsuario se não houver
+        if (usuario.getPerfilUsuario() == null) {
+            PerfilUsuario perfil = new PerfilUsuario();
+            perfil.setUsuario(usuario); // vincula o usuário ao perfil
+
+            // 🔹 Preencher campos obrigatórios
+            perfil.setDescricao("Perfil padrão");   // descrição default
+            perfil.setNivelAcesso("USUARIO");       // nível default (ou ADMIN, se preferir)
+
+            usuario.setPerfilUsuario(perfil);
+        }
+
+        // Salva o usuário com o perfil (CascadeType.ALL garante que o PerfilUsuario seja salvo)
         return usuarioRepository.save(usuario);
     }
 
@@ -46,38 +62,30 @@ public class UsuarioServiceImpl implements UsuarioService {
         usuarioRepository.deleteById(id);
     }
 
-// Dentro de UsuarioServiceImpl
-
-    // Buscar usuário por email
+    @Override
     @Transactional(readOnly = true)
     public Usuario buscarPorEmail(String email) {
         Usuario usuario = usuarioRepository.findByEmail(email);
-        if (usuario == null) {
-            throw new UsuarioException("Usuário não encontrado com email: " + email);
+        if (usuario == null) throw new UsuarioException("Usuário não encontrado com email: " + email);
+        return usuario;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Usuario login(LoginDTO loginDTO) {
+        Usuario usuario = buscarPorEmail(loginDTO.getEmail());
+        if (!usuario.getSenha().equals(loginDTO.getSenha())) {
+            throw new UsuarioException("Senha incorreta");
         }
         return usuario;
     }
 
-    // Login com DTO
-    @Transactional(readOnly = true)
-    public Usuario login(LoginDTO loginDTO) {
-        Usuario usuario = buscarPorEmail(loginDTO.getEmail());
-
-        if (!usuario.getSenha().equals(loginDTO.getSenha())) {
-            throw new UsuarioException("Senha incorreta");
-        }
-
-        return usuario; // podemos retornar o usuário, e o controller decide o que expor
-    }
-
-    // Buscar apenas o perfil do usuário
+    @Override
     @Transactional(readOnly = true)
     public PerfilDTO buscarPerfil(Long usuarioId) {
         Usuario usuario = buscarPorId(usuarioId);
-
-        if (usuario.getPerfilUsuario() == null) {
+        if (usuario.getPerfilUsuario() == null)
             throw new UsuarioException("Usuário não possui perfil associado");
-        }
 
         return new PerfilDTO(
                 usuario.getNome(),
@@ -88,4 +96,11 @@ public class UsuarioServiceImpl implements UsuarioService {
         );
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public Long buscarPerfilId(Long usuarioId) {
+        return perfilUsuarioRepository.findByUsuarioId(usuarioId)
+                .orElseThrow(() -> new UsuarioException("Perfil não encontrado"))
+                .getId();
+    }
 }
