@@ -1,0 +1,137 @@
+/* ===== Reset básico ===== */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #121212;
+    color: #fff;
+    margin: 0;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+h1, h3, p, label {
+    margin-bottom: 0.5rem;
+}
+
+/* ===== Sidebar do jogo ===== */
+#game-sidebar {
+    background-color: #1e1e1e;
+    padding: 1.5rem 1rem;
+    border-radius: 10px;
+    text-align: center;
+}
+
+#game-sidebar img {
+    max-width: 220px;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+}
+
+/* ===== Rating ===== */
+#star-rating i {
+    font-size: 1.5rem;
+    margin-right: 0.2rem;
+    color: #ff4da6; /* rosa */
+}
+
+#rating-bars .progress {
+    height: 12px;
+    border-radius: 6px;
+    background-color: #2a2a2a;
+    margin-bottom: 0.5rem;
+}
+
+#rating-bars .progress-bar {
+    background-color: #ff4da6;
+}
+
+/* ===== Botões de status ===== */
+#status-buttons {
+    margin-top: 1rem;
+}
+
+#status-buttons button {
+    width: 110px;
+    border-radius: 6px;
+    font-weight: 500;
+    margin: 0.3rem;
+    color: #fff;
+    border: none;
+    transition: 0.2s;
+}
+
+#btn-played { background-color: #007bff; }
+#btn-playing { background-color: #28a745; }
+#btn-backlog { background-color: #ff4da6; color: #000; }
+#btn-wishlist { background-color: #17a2b8; }
+
+#status-buttons button:hover {
+    opacity: 0.85;
+}
+
+/* ===== Conteúdo principal ===== */
+#game-content {
+    padding-left: 1rem;
+}
+
+/* ===== Formulário de registro ===== */
+#perfilJogoForm {
+    background-color: #1e1e1e;
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin-top: 1rem;
+}
+
+#perfilJogoForm input,
+#perfilJogoForm select,
+#perfilJogoForm textarea {
+    background-color: #2a2a2a;
+    border: 1px solid #444;
+    color: #fff;
+    border-radius: 6px;
+    padding: 0.5rem;
+}
+
+#perfilJogoForm input:focus,
+#perfilJogoForm select:focus,
+#perfilJogoForm textarea:focus {
+    border-color: #ff4da6;
+    outline: none;
+}
+
+/* Botão salvar */
+#perfilJogoForm button {
+    background-color: #ff4da6;
+    color: #000;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    width: 100%;
+    padding: 0.5rem 0;
+    transition: 0.2s;
+}
+
+#perfilJogoForm button:hover {
+    opacity: 0.9;
+}
+
+/* ===== Responsividade ===== */
+@media (max-width: 768px) {
+    #game-sidebar, #game-content {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    #status-buttons button {
+        width: 48%;
+        margin-bottom: 0.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    #game-sidebar img {
+        max-width: 180px;
+    }
+}

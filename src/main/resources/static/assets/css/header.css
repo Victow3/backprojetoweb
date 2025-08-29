@@ -1,3 +1,4 @@
+/* Botão de login */
 .custom-btn-login {
   background-color: #EA377A !important;
   height: 32px;
@@ -9,6 +10,7 @@
   background-color: #F26A99 !important; 
 }
 
+/* Navbar */
 .navbar {
   height: 56px;
 }
@@ -43,4 +45,38 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Nome do usuário logado */
+.user-name-link {
+  color: #ff4da6; /* rosa destaque do site */
+  font-weight: bold;
+}
+
+.user-name-link:hover {
+  color: #f26a99;
+  text-decoration: underline;
+}
+
+/* Container de usuário logado */
+.logged-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Botão logout */
+.btn-logout {
+  background-color: #EA377A;
+  color: #fff;
+  border: none;
+  padding: 4px 12px;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-logout:hover {
+  background-color: #F26A99;
 }

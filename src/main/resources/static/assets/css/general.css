@@ -93,3 +93,54 @@ body {
   border-radius: 12px;
   padding: 2px 8px;
 }
+
+/* ====== BOTÕES GLOBAIS CUSTOMIZADOS ====== */
+
+/* Botão padrão (equivalente ao .btn-primary) */
+.btn,
+.btn-primary {
+  background-color: #EA377A !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 8px !important;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s;
+}
+
+.btn:hover,
+.btn-primary:hover {
+  background-color: #c52f67 !important;
+  transform: translateY(-2px);
+}
+
+/* Botão outline */
+.btn-outline,
+.btn-outline-light,
+.btn-outline-dark,
+.btn-outline-primary {
+  background-color: transparent !important;
+  border: 2px solid #EA377A !important;
+  color: #EA377A !important;
+  border-radius: 8px !important;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.btn-outline:hover,
+.btn-outline-light:hover,
+.btn-outline-dark:hover,
+.btn-outline-primary:hover {
+  background-color: #EA377A !important;
+  color: #fff !important;
+}
+
+/* Botão desabilitado */
+.btn:disabled,
+.btn.disabled {
+  background-color: #444 !important;
+  color: #999 !important;
+  border: none !important;
+  opacity: 0.7 !important;
+  cursor: not-allowed !important;
+}
+

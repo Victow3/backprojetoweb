@@ -11,7 +11,7 @@ function cardHtml(game) {
   const cover = (game.coverUrl || '').replace('t_thumb', 't_1080p') || 'assets/images/no-cover.png';
   const ano = game.releaseDate ? new Date(game.releaseDate).getFullYear() : "-";
   return `
-    <a href="/games-info.html?id=${game.id}" class="text-decoration-none text-white">
+    <a href="games-info.html?id=${game.id}" class="text-decoration-none text-white">
       <div class="game-card shadow">
         <img src="${cover}" alt="${game.name}" class="game-cover">
         <div class="overlay"><h5>${game.name}</h5></div>

@@ -2,48 +2,84 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Detalhes do Jogo</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/general.css" />
+  <link rel="stylesheet" href="assets/css/games-info.css">
+  <link rel="stylesheet" href="assets/js/games-info.js">
+     <link rel="icon" href="assets/images/favicon.ico" />
+   <link rel="stylesheet" href="assets/css/header.css" />
+   <link rel="stylesheet" href="assets/css/footer.css" />
+   <script src="assets/js/header.js" defer></script>
+  <script src="assets/js/footer.js" defer></script>
+  <script src="https://kit.fontawesome.com/your-kit.js" crossorigin="anonymous"></script>
 </head>
 <body>
   <main class="container py-4">
-    <div id="game-info" class="mb-4"></div>
 
-    <h3>Registrar no meu perfil</h3>
-    <form id="perfilJogoForm" class="mb-4">
-      <input type="hidden" id="gameId">
-      <input type="hidden" id="gameName">
+    <main-header></main-header>
 
-      <div class="mb-3">
-        <label>Status*</label>
-        <select id="status" class="form-select" required>
-          <option value="">Selecione...</option>
-          <option value="JOGOU">Já jogou</option>
-          <option value="QUER_JOGAR">Quer jogar</option>
-          <option value="ABANDONOU">Abandonou</option>
-        </select>
+    <!-- Game Info Header -->
+    <div class="row mb-4">
+      <!-- Sidebar com capa e rating -->
+      <div class="col-md-4 text-center" id="game-sidebar">
+        <img id="game-cover" src="assets/images/no-cover.png" alt="Capa do Jogo" class="img-fluid mb-2">
+        <div id="star-rating" class="mb-2"></div>
+        <div id="rating-bars"></div>
+        <div class="d-flex flex-wrap justify-content-center mt-3" id="status-buttons">
+          <button class="btn btn-outline-primary me-2 mb-2" id="btn-played">Played</button>
+          <button class="btn btn-outline-success me-2 mb-2" id="btn-playing">Playing</button>
+          <button class="btn btn-outline-warning me-2 mb-2" id="btn-backlog">Backlog</button>
+          <button class="btn btn-outline-info me-2 mb-2" id="btn-wishlist">Wishlist</button>
+        </div>
       </div>
 
-      <div class="mb-3">
-        <label>Horas jogadas</label>
-        <input type="number" id="horasJogadas" class="form-control" min="1" max="10000">
-      </div>
+      <!-- Conteúdo do jogo -->
+      <div class="col-md-8" id="game-content">
+        <h1 id="game-title">Carregando...</h1>
+        <p id="game-summary">Aguarde enquanto as informações do jogo são carregadas.</p>
+        <p><strong>Lançamento:</strong> <span id="game-release">-</span></p>
+        <p><strong>Desenvolvedor:</strong> <span id="game-developer">-</span></p>
 
-      <div class="mb-3">
-        <label>Nota (0.5 a 5)</label>
-        <input type="number" id="nota" class="form-control" step="0.5" min="0.5" max="5">
-      </div>
+        <!-- Formulário de registro -->
+        <h3 class="mt-4">Registrar no meu perfil</h3>
+        <form id="perfilJogoForm" class="mb-4">
+          <input type="hidden" id="gameId">
+          <input type="hidden" id="gameName">
 
-      <div class="mb-3">
-        <label>Comentário</label>
-        <textarea id="comentario" class="form-control" rows="4" maxlength="1000"></textarea>
-      </div>
+          <div class="mb-3">
+            <label>Status*</label>
+            <select id="status" class="form-select" required>
+              <option value="">Selecione...</option>
+              <option value="JOGOU">Já jogou</option>
+              <option value="QUER_JOGAR">Quer jogar</option>
+              <option value="ABANDONOU">Abandonou</option>
+            </select>
+          </div>
 
-      <button class="btn btn-primary">Salvar</button>
-    </form>
+          <div class="mb-3">
+            <label>Horas jogadas</label>
+            <input type="number" id="horasJogadas" class="form-control" min="1" max="10000">
+          </div>
+
+          <div class="mb-3">
+            <label>Nota (0.5 a 5)</label>
+            <input type="number" id="nota" class="form-control" step="0.5" min="0.5" max="5">
+          </div>
+
+          <div class="mb-3">
+            <label>Comentário</label>
+            <textarea id="comentario" class="form-control" rows="4" maxlength="1000"></textarea>
+          </div>
+
+          <button class="btn btn-primary">Salvar</button>
+        </form>
+      </div>
+    </div>
+
   </main>
+  <main-footer></main-footer>
 
-  <script src="assets/js/game-detail.js"></script>
+  <script src="assets/js/games-info.js"></script>
 </body>
 </html>

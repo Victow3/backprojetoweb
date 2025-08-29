@@ -1,0 +1,132 @@
+/* ===== Corpo da página ===== */
+body {
+  background-color: #121212;
+  color: #fff;
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* ===== Títulos ===== */
+h2, h3 {
+  color: #ff4da6; /* Rosa destaque */
+  margin-bottom: 1rem;
+  font-weight: bold;
+}
+
+/* ===== Tabelas ===== */
+.table {
+  background-color: #1e1e1e; /* Fundo da tabela */
+  border-radius: 8px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.table th, .table td {
+  vertical-align: middle;
+  padding: 10px 12px;
+  text-align: center;
+}
+
+.table thead {
+  background-color: #ff4da6; /* Cabeçalho rosa */
+  color: white;
+  font-weight: bold;
+}
+
+.table tbody tr:nth-child(even) {
+  background-color: #2a2a2a; /* Linhas pares */
+}
+
+.table tbody tr:nth-child(odd) {
+  background-color: #212121; /* Linhas ímpares */
+}
+
+.table tbody tr:hover {
+  background-color: #3a3a3a; /* Hover linha */
+}
+
+/* ===== Botões principais ===== */
+.btn-custom {
+  background-color: #ff4da6;
+  color: white;
+  border: none;
+  font-weight: bold;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-custom:hover {
+  background-color: #e04390;
+  color: white;
+}
+
+/* ===== Botões de ações nas tabelas ===== */
+.table button {
+  background-color: #ff4da6;
+  color: #fff;
+  border: none;
+  padding: 4px 10px;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: 0.2s;
+  margin: 0 2px;
+}
+
+.table button:hover {
+  background-color: #e04390;
+  color: white;
+}
+
+/* ===== Botões outline rosa ===== */
+.btn-outline-custom {
+  border: 1px solid #ff4da6;
+  color: #ff4da6;
+  background-color: transparent;
+  padding: 6px 14px;
+  border-radius: 5px;
+  font-size: 0.85rem;
+}
+
+.btn-outline-custom:hover {
+  background-color: #ff4da6;
+  color: white;
+}
+
+/* ===== Separadores ===== */
+hr {
+  border-color: #ff4da6;
+  opacity: 0.3;
+  margin: 2rem 0;
+}
+
+/* ===== Espaçamento interno dos containers ===== */
+main.container {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+/* ===== Responsividade ===== */
+@media (max-width: 768px) {
+  h2, h3 {
+    font-size: 1.4rem;
+  }
+
+  .table th, .table td {
+    padding: 6px 8px;
+    font-size: 0.85rem;
+  }
+
+  .table button {
+    padding: 3px 6px;
+    font-size: 0.75rem;
+  }
+
+  .btn-custom {
+    padding: 6px 12px;
+    font-size: 0.9rem;
+  }
+}

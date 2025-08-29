@@ -1,114 +1,104 @@
-/* Reset básico apenas para o container do registro e seus filhos */
-.container-registro,
-.container-registro * {
+/* ===== Reset ===== */
+* {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-/* Corpo da página: só ajuste de fonte e cor para registro, sem mexer no body */
-.container-registro {
-  font-family: Arial, sans-serif;
+/* ===== Container principal ===== */
+.container-login {
+  font-family: 'Roboto', sans-serif;
   font-size: 16px;
-  background-color: transparent;
+  background-color: transparent; /* igual login */
   width: 100%;
   max-width: 500px;
   border-radius: 10px;
   padding: 30px 40px;
-  margin: 5rem auto; /* centraliza o formulário */
-  color: white;
-  /* Removido overflow para evitar barra de rolagem interna */
+  margin: 5rem auto;
+  color: #fff;
 }
 
-/* Título */
-.container-registro h1 {
+/* ===== Título ===== */
+.container-login h1 {
   font-size: 28px;
   text-align: center;
   margin-bottom: 20px;
-  color: #ffffff;
+  color: #b0b0b0; /* igual login */
   padding: 10px 0;
-  border-radius: 4px;
 }
 
-/* Inputs e caixas */
-.container-registro .input-box {
-  position: relative;
-  width: 100%;
-  height: auto;
-  margin: 15px 0;
+/* ===== Inputs ===== */
+.custom-input {
+  background-color: #272C37 !important; /* igual login */
+  color: #fff !important;
+  border: none !important;
+  border-radius: 4px !important;
+  padding-left: 20px !important;
+  height: 40px !important;
+  font-size: 16px !important;
 }
 
-.container-registro .input-box input {
-  width: 100%;
-  height: 40px;
-  background-color: #272C37;
-  outline: none;
-  font-size: 16px;
-  color: #fff;
-  padding: 0 20px;
-  border: none;
-  border-radius: 4px;
+.custom-input::placeholder {
+  color: #8F9CA7 !important;
 }
 
-.container-registro .input-box input::placeholder {
-  color: #8F9CA7;
+/* ===== Termos ===== */
+.form-check-label {
+  color: #b0b0b0 !important;
+  font-size: 0.85rem !important;
 }
 
-.container-registro .input-box small {
-  color: #8F9CA7;
-  font-size: 0.85rem;
-  display: block;
-  margin-top: 5px;
-}
-
-/* Termos */
-.container-registro .terms {
-  margin-bottom: 15px;
-  font-size: 0.9rem;
-}
-
-.container-registro .terms label {
-  color: #8F9CA7;
-  font-size: 0.85rem;
-  display: block;
-  margin-top: 5px;
-}
-
-.container-registro .terms input[type="checkbox"] {
+.form-check-input {
+  accent-color: #EA377A !important; /* rosa */
   margin-right: 5px;
 }
 
-/* Botão */
-.container-registro button {
+/* ===== Botão ===== */
+.custom-btn {
   width: 100%;
-  padding: 12px;
-  background-color: #EA377A;
-  color: #ffffff;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
+  padding: 12px !important;
+  background-color: #EA377A !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 5px !important;
+  font-size: 16px !important;
+  font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.2s;
 }
 
-.container-registro button:hover {
-  background-color: #c52f67;
+.custom-btn:hover {
+  background-color: #F26A99 !important;
+  transform: translateY(-2px);
 }
 
-/* Link para login */
-.container-registro .login-link {
+/* ===== Link para login ===== */
+.login-link {
   text-align: center;
   margin-top: 15px;
-  color: #8F9CA7;
+  color: #b0b0b0;
   font-size: 0.85rem;
 }
 
-.container-registro .login-link a {
+.login-link a {
   color: #EA377A;
   text-decoration: none;
   font-weight: bold;
 }
 
-.container-registro .login-link a:hover {
+.login-link a:hover {
   text-decoration: underline;
+}
+
+/* ===== Responsividade ===== */
+@media (min-width: 768px) {
+  .container-login {
+    padding: 40px 50px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-login {
+    padding: 50px 60px;
+  }
 }
