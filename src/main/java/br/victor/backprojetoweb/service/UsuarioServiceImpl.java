@@ -2,6 +2,7 @@ package br.victor.backprojetoweb.service;
 
 import br.victor.backprojetoweb.dto.LoginDTO;
 import br.victor.backprojetoweb.dto.PerfilDTO;
+import br.victor.backprojetoweb.dto.UsuarioUpdateDTO;
 import br.victor.backprojetoweb.exception.UsuarioException;
 import br.victor.backprojetoweb.model.PerfilUsuario;
 import br.victor.backprojetoweb.model.Usuario;
@@ -30,16 +31,15 @@ public class UsuarioServiceImpl implements UsuarioService {
         // Cria automaticamente um PerfilUsuario se não houver
         if (usuario.getPerfilUsuario() == null) {
             PerfilUsuario perfil = new PerfilUsuario();
-            perfil.setUsuario(usuario); // vincula o usuário ao perfil
+            perfil.setUsuario(usuario);
 
-            // 🔹 Preencher campos obrigatórios
-            perfil.setDescricao("Perfil padrão");   // descrição default
-            perfil.setNivelAcesso("USUARIO");       // nível default (ou ADMIN, se preferir)
+            // valores padrão
+            perfil.setDescricao("Perfil padrão");
+            perfil.setNivelAcesso("USUARIO");
 
             usuario.setPerfilUsuario(perfil);
         }
 
-        // Salva o usuário com o perfil (CascadeType.ALL garante que o PerfilUsuario seja salvo)
         return usuarioRepository.save(usuario);
     }
 
@@ -102,5 +102,14 @@ public class UsuarioServiceImpl implements UsuarioService {
         return perfilUsuarioRepository.findByUsuarioId(usuarioId)
                 .orElseThrow(() -> new UsuarioException("Perfil não encontrado"))
                 .getId();
+    }
+
+    @Override
+    @Transactional
+    public Usuario atualizarUsuario(Long id, UsuarioUpdateDTO dto) {
+        Usuario usuario = buscarPorId(id); // busca no banco
+        usuario.setNome(dto.getNome());
+        usuario.setEmail(dto.getEmail());
+        return usuarioRepository.save(usuario);
     }
 }

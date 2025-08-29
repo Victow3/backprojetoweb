@@ -1,0 +1,95 @@
+body {
+  background-color: #121216 !important;
+  font-family: 'Roboto', sans-serif !important;
+}
+
+.index-tittle-text-color {
+  color: #b0b0b0;
+}
+
+.index-container-text-color {
+  color: #fff;
+}
+
+/* Card do jogo */
+.game-card {
+  position: relative;
+  border-radius: 1rem;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+  background-color: #1e1e25;
+}
+
+.game-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 15px 25px rgba(0,0,0,0.5);
+}
+
+/* Imagem do jogo */
+.game-cover {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s;
+}
+
+.game-card:hover .game-cover {
+  transform: scale(1.05);
+}
+
+/* Overlay central com o nome */
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  opacity: 0;
+  transition: opacity 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.game-card:hover .overlay {
+  opacity: 1;
+}
+
+.overlay h5 {
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: bold;
+  padding: 0 10px;
+}
+
+/* Card inferior com ano e plataformas */
+.card-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0,0,0,0.7);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card-info p {
+  margin: 2px 0 4px 0;
+  color: #ccc;
+  font-size: 0.8rem;
+}
+
+.platform-badge {
+  background-color: #333;
+  color: #b0b0b0;
+  font-size: 0.75rem;
+  margin: 2px 2px 0 0;
+  border-radius: 12px;
+  padding: 2px 8px;
+}

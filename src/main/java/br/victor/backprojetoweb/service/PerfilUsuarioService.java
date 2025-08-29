@@ -26,4 +26,9 @@ public class PerfilUsuarioService {
         return perfilUsuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Perfil não encontrado"));
     }
+
+    public void deletar(PerfilUsuario perfil) {
+        perfilUsuarioRepository.delete(perfil);
+    }
+
 }

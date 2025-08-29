@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/usuarios")
+@CrossOrigin(origins = "http://localhost:5500") // ajuste se precisar
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
@@ -22,6 +23,7 @@ public class UsuarioController {
         this.usuarioService = usuarioService;
     }
 
+    // Converte Entity -> ResponseDTO
     private UsuarioResponseDTO toResponseDTO(Usuario usuario) {
         UsuarioResponseDTO dto = new UsuarioResponseDTO();
         dto.setId(usuario.getId());
@@ -31,6 +33,7 @@ public class UsuarioController {
         return dto;
     }
 
+    // Converte RequestDTO -> Entity
     private Usuario toEntity(UsuarioRequestDTO dto) {
         Usuario usuario = new Usuario();
         usuario.setNome(dto.getNome());
@@ -39,6 +42,7 @@ public class UsuarioController {
         return usuario;
     }
 
+    // Criar novo usuário
     @PostMapping
     public ResponseEntity<UsuarioResponseDTO> criarUsuario(@Valid @RequestBody UsuarioRequestDTO usuarioDTO) {
         Usuario usuario = toEntity(usuarioDTO);
@@ -47,6 +51,7 @@ public class UsuarioController {
         return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
     }
 
+    // Listar todos (usando DTO)
     @GetMapping
     public List<UsuarioResponseDTO> listarUsuarios() {
         return usuarioService.listarUsuarios().stream()
@@ -54,6 +59,7 @@ public class UsuarioController {
                 .collect(Collectors.toList());
     }
 
+    // Buscar por id
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioResponseDTO> buscarPorId(@PathVariable Long id) {
         try {
@@ -64,13 +70,31 @@ public class UsuarioController {
         }
     }
 
+    // Atualizar (PUT)
+    @PutMapping("/{id}")
+    public ResponseEntity<UsuarioResponseDTO> atualizarUsuario(
+            @PathVariable Long id,
+            @Valid @RequestBody UsuarioUpdateDTO usuarioDTO) {
+        try {
+            Usuario usuario = usuarioService.buscarPorId(id);
+            usuario.setNome(usuarioDTO.getNome());
+            usuario.setEmail(usuarioDTO.getEmail());
+
+            Usuario atualizado = usuarioService.salvarUsuario(usuario);
+            return ResponseEntity.ok(toResponseDTO(atualizado));
+        } catch (UsuarioException ex) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    // Deletar usuário
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarUsuario(@PathVariable Long id) {
         usuarioService.deletarUsuario(id);
         return ResponseEntity.noContent().build();
     }
 
-    // ✅ Login com DTO correto
+    // Login
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginDTO loginDTO) {
         try {
@@ -90,6 +114,7 @@ public class UsuarioController {
         }
     }
 
+    // Buscar perfil pelo usuário
     @GetMapping("/{id}/perfil")
     public ResponseEntity<PerfilDTO> getPerfil(@PathVariable Long id) {
         try {
@@ -99,4 +124,5 @@ public class UsuarioController {
             return ResponseEntity.notFound().build();
         }
     }
+
 }

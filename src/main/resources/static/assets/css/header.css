@@ -1,0 +1,46 @@
+.custom-btn-login {
+  background-color: #EA377A !important;
+  height: 32px;
+  line-height: 32px;
+  padding: 0 12px;
+}
+
+.custom-btn-login:hover {
+  background-color: #F26A99 !important; 
+}
+
+.navbar {
+  height: 56px;
+}
+
+.navbar-collapse > .d-flex {
+  align-items: center;
+  gap: 12px;
+}
+
+.navbar form {
+  position: relative;
+  min-width: 200px;
+}
+
+.navbar form input.form-control {
+  height: 32px;
+  padding: 4px 36px 4px 12px;
+  font-size: 14px;
+}
+
+.navbar form button {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 24px;
+  width: 24px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: #6c757d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
