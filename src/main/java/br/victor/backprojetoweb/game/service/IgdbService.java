@@ -18,17 +18,31 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Serviço responsável por integrar a aplicação com a API externa da IGDB.
+ *
+ * Funções principais:
+ * - Autenticação na IGDB usando Client ID e Client Secret.
+ * - Consultas de jogos (lista, busca por nome, busca por ID).
+ * - Conversão da resposta JSON da IGDB para objetos GameDTO.
+ */
 @Service
 public class IgdbService {
 
+    // Credenciais do aplicativo IGDB (injetadas via application.properties)
     @Value("${igdb.client-id}")
     private String clientId;
 
     @Value("${igdb.client-secret}")
     private String clientSecret;
 
+    // Token de acesso gerado após autenticação
     private String accessToken;
 
+    /**
+     * Realiza autenticação na IGDB para obter o token de acesso.
+     * O token é armazenado na variável accessToken.
+     */
     private void autenticar() throws Exception {
         String urlStr = "https://id.twitch.tv/oauth2/token"
                 + "?client_id=" + clientId
@@ -46,11 +60,15 @@ public class IgdbService {
 
             ObjectMapper mapper = new ObjectMapper();
             JsonNode json = mapper.readTree(response.toString());
-            this.accessToken = json.get("access_token").asText();
+            this.accessToken = json.get("access_token").asText(); // salva token
         }
     }
 
+    /**
+     * Metodo interno que faz a chamada POST para a API da IGDB e converte a resposta JSON em GameDTO.
+     */
     private List<GameDTO> chamarIGDB(String query) throws Exception {
+        // Garante que haja um token válido
         if (accessToken == null) autenticar();
 
         URL url = new URL("https://api.igdb.com/v4/games");
@@ -61,10 +79,12 @@ public class IgdbService {
         conn.setRequestProperty("Accept", "application/json");
         conn.setDoOutput(true);
 
+        // Envia o corpo da requisição com a query
         try (OutputStream os = conn.getOutputStream()) {
             os.write(query.getBytes(StandardCharsets.UTF_8));
         }
 
+        // Lê a resposta da IGDB
         StringBuilder response = new StringBuilder();
         try (BufferedReader br = new BufferedReader(
                 new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8))) {
@@ -72,10 +92,11 @@ public class IgdbService {
             while ((line = br.readLine()) != null) response.append(line.trim());
         }
 
+        // Converte JSON em lista de GameDTO
         ObjectMapper mapper = new ObjectMapper();
         JsonNode array = mapper.readTree(response.toString());
-
         List<GameDTO> jogos = new ArrayList<>();
+
         for (JsonNode node : array) {
             Long id = node.has("id") ? node.get("id").asLong() : null;
             String name = node.has("name") ? node.get("name").asText() : "Sem nome";
@@ -95,7 +116,9 @@ public class IgdbService {
         return jogos;
     }
 
-    // Lista base (com paginação)
+    /**
+     * Lista jogos da IGDB com paginação.
+     */
     public List<GameDTO> buscarJogos(int limit, int offset) {
         try {
             String query = String.format(
@@ -106,14 +129,16 @@ public class IgdbService {
             return chamarIGDB(query);
         } catch (Exception e) {
             e.printStackTrace();
-            return List.of();
+            return List.of(); // retorna lista vazia em caso de erro
         }
     }
 
-    // Busca por nome (com paginação)
+    /**
+     * Busca jogos da IGDB pelo nome, com paginação.
+     */
     public List<GameDTO> buscarJogosPorNome(String nome, int limit, int offset) {
         try {
-            String termo = nome.replace("\"", "\\\"");
+            String termo = nome.replace("\"", "\\\""); // escapa aspas
             String query = String.format(
                     "search \"%s\";" +
                             " fields id, name, first_release_date, cover.url, summary;" +
@@ -126,7 +151,9 @@ public class IgdbService {
         }
     }
 
-    // Busca por ID único
+    /**
+     * Busca um jogo específico da IGDB pelo ID.
+     */
     public GameDTO buscarPorId(Long id) {
         try {
             String query = "fields id, name, cover.url, first_release_date, summary; where id = " + id + ";";
